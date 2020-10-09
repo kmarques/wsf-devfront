@@ -1,12 +1,25 @@
-import React from 'react';
-import logo from './logo.svg';
-import './App.css';
+import React, { useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
+import Theme from "./Theme";
+import List from "./List";
 
 function App() {
+  const [theme, setTheme] = useState({
+    name: "Light",
+  });
+
+  const toggleTheme = () => {
+    if (theme.name === "Dark") setTheme({ name: "Light" });
+    else setTheme({ name: "Dark" });
+  };
+
   return (
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
+        <Theme theme={theme} toggleTheme={toggleTheme} />
+        <List/>
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
