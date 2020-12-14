@@ -1,7 +1,19 @@
 import React, { useState, useEffect, useMemo, useCallback } from "react";
+import { ListContext } from "../../contexts/ListContext";
 import ItemForm from "./ItemForm";
 import ItemList from "./ItemList";
 import Search from "./SearchAutocomplete";
+
+function SayHi() {
+  const [state, setstate] = useState("");
+
+  return (
+    <div>
+      <button onClick={() => setstate(Date.now())}>Display date</button>
+      {state}
+    </div>
+  );
+}
 
 const table = [1, 2, 3];
 /**
@@ -15,9 +27,12 @@ function List() {
   const [filter, setFilter] = useState("");
   const [bool, setBool] = useState(true);
 
-  const addItem = (name) => {
-    setList([...list, name]);
-  };
+  const addItem = useCallback(
+    (name) => {
+      setList([...list, name]);
+    },
+    [list]
+  );
   const updateItem = (name, value) => {
     setList(list.map((item) => (item === name ? value : item)));
   };
@@ -48,21 +63,39 @@ function List() {
     return list.filter((item) => item.toString().startsWith(filter));
   }, [list, filter]);
 
-  const deleteItem = useCallback((name) => {
-    return () => setList(list.filter((item) => item !== name));
-  }, []);
+  const deleteItem = useCallback(
+    (name) => {
+      return () => setList(list.filter((item) => item !== name));
+    },
+    [list]
+  );
+  const toggleBool = useCallback(() => {
+    return () => setBool(!bool);
+  }, [bool]);
 
-  return (
-    <div>
-      <button onClick={() => setBool(!bool)}>toggle</button>
-      <Search filter={filter} setFilter={setFilter} choices={list} />
-      <ul>
-        {listFiltered.map((item) => (
-          <ItemList key={item} item={item} deleteItem={deleteItem} />
-        ))}
-      </ul>
-      <ItemForm onSubmit={addItem} />
-    </div>
+  return useMemo(
+    () => (
+      <div>
+        <button onClick={toggleBool}>toggle</button>
+        <Search filter={filter} setFilter={setFilter} choices={list} />
+        <ul>
+          <ListContext.Consumer>
+            {(context) => {
+              return context.map((item) => (
+                <ItemList
+                  key={item}
+                  item={item}
+                  deleteItem={deleteItem(item)}
+                />
+              ));
+            }}
+          </ListContext.Consumer>
+        </ul>
+        <ItemForm onSubmit={addItem} />
+        <SayHi />
+      </div>
+    ),
+    [toggleBool, filter, listFiltered, deleteItem, addItem]
   );
 }
 
