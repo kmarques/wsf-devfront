@@ -4,7 +4,7 @@ function ItemForm({ onSubmit }) {
   const [name, setName] = useState("");
   return (
     <div>
-      <label for="name">Label</label>
+      <label htmlFor="name">Label</label>
       <input
         type="text"
         value={name}

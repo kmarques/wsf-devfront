@@ -1,6 +1,10 @@
-import React, { useState } from "react";
+import React from "react";
 
-function Theme({ theme, toggleTheme }) {
+//props: {} || {theme, toggleTheme}
+function Theme(props) {
+  const theme = props.theme;
+  const toggleTheme = props.toggleTheme;
+
   return (
     <div>
       <h1>{theme.name}</h1>

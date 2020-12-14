@@ -9,6 +9,8 @@ function App() {
     name: "Light",
   });
 
+  const [displayList, setDisplayList] = useState(true);
+
   const toggleTheme = () => {
     if (theme.name === "Dark") setTheme({ name: "Light" });
     else setTheme({ name: "Dark" });
@@ -19,7 +21,11 @@ function App() {
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
         <Theme theme={theme} toggleTheme={toggleTheme} />
-        <List/>
+        <button onClick={() => setDisplayList(!displayList)}>
+          Toggle list view
+        </button>
+        {displayList && <List />}
+        {!displayList && "Masked list"}
         <p>
           Edit <code>src/App.js</code> and save to reload.
         </p>
