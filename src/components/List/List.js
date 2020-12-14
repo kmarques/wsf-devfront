@@ -1,6 +1,7 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useMemo, useCallback } from "react";
 import ItemForm from "./ItemForm";
 import ItemList from "./ItemList";
+import Search from "./SearchAutocomplete";
 
 const table = [1, 2, 3];
 /**
@@ -11,9 +12,9 @@ const table = [1, 2, 3];
  */
 function List() {
   const [list, setList] = useState([]);
-  const deleteItem = (name) => {
-    setList(list.filter((item) => item !== name));
-  };
+  const [filter, setFilter] = useState("");
+  const [bool, setBool] = useState(true);
+
   const addItem = (name) => {
     setList([...list, name]);
   };
@@ -42,15 +43,22 @@ function List() {
     };
   }, [list]);
 
+  const listFiltered = useMemo(() => {
+    console.log("Update filtered list");
+    return list.filter((item) => item.toString().startsWith(filter));
+  }, [list, filter]);
+
+  const deleteItem = useCallback((name) => {
+    return () => setList(list.filter((item) => item !== name));
+  }, []);
+
   return (
     <div>
+      <button onClick={() => setBool(!bool)}>toggle</button>
+      <Search filter={filter} setFilter={setFilter} choices={list} />
       <ul>
-        {list.map((item) => (
-          <ItemList
-            key={item}
-            item={item}
-            deleteItem={() => deleteItem(item)}
-          />
+        {listFiltered.map((item) => (
+          <ItemList key={item} item={item} deleteItem={deleteItem} />
         ))}
       </ul>
       <ItemForm onSubmit={addItem} />

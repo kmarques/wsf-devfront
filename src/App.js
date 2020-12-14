@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import logo from "./logo.svg";
 import "./App.css";
 import Theme from "./Theme";
-import List from "./List";
+import List from "./components/List/List";
 
 function App() {
   const [theme, setTheme] = useState({
