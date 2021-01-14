@@ -13,11 +13,13 @@ function ItemList({ item }) {
   return useMemo(
     () => (
       <li>
-        {!bool && item}
+        {!bool && item.name}
         {bool && (
           <ItemForm
-            onSubmit={(value) => updateItem(item, value)}
-            defaultName={item}
+            onSubmit={(value) => {
+              updateItem(item, value).then(() => setBool(false));
+            }}
+            defaultName={item.name}
           />
         )}
         <button onClick={() => deleteItem(item)}> Supprimer</button>

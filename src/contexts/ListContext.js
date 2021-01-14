@@ -7,40 +7,54 @@ export const ListContext = createContext([]);
 export default function ListProvider({ children }) {
   const [list, setList] = useState([]);
 
+  useEffect(() => {
+    fetch("http://localhost:3000/posts")
+      .then((res) => res.json())
+      .then((data) => setList(data));
+  }, []);
+
   const addItem = useCallback(
     (name) => {
-      setList([...list, name]);
+      return fetch("http://localhost:3000/posts", {
+        method: "POST",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ name }),
+      })
+        .then((res) => res.json())
+        .then((data) => setList([...list, data]));
     },
     [list]
   );
 
   const updateItem = useCallback(
-    (name, value) => {
-      setList(list.map((item) => (item === name ? value : item)));
+    (item, value) => {
+      return fetch("http://localhost:3000/posts/" + item.id, {
+        method: "PUT",
+        headers: { "content-type": "application/json" },
+        body: JSON.stringify({ id: item.id, name: value }),
+      })
+        .then((res) => res.json())
+        .then((data) =>
+          setList(list.map((elem) => (elem.id === item.id ? data : elem)))
+        );
     },
     [list]
   );
 
   const deleteItem = useCallback(
-    (name) => {
-      setList(list.filter((item) => item !== name));
+    (item) => {
+      return fetch("http://localhost:3000/posts/" + item.id, {
+        method: "DELETE",
+      })
+        .then((res) => res.json())
+        .then(() => setList(list.filter((elem) => elem.id !== item.id)));
     },
     [list]
   );
 
-  useEffect(() => {
-    console.log("UE1 - List mounted");
-    const handler = setTimeout(() => {
-      // Sans pagination
-      setList(table);
-      // Avec pagination
-      //setList([...list, ...table]);
-    }, 10000);
-    return () => {
-      console.log("UE1 - List unmounted");
-      clearTimeout(handler);
-    };
-  }, []);
-
-  return <ListContext.Provider value={{list, addItem, updateItem, deleteItem}}>{children}</ListContext.Provider>;
+  return (
+    <ListContext.Provider value={{ list, addItem, updateItem, deleteItem }}>
+      {children}
+    </ListContext.Provider>
+  );
 }
