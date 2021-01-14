@@ -30,6 +30,7 @@ function SearchAutocomplete({ filter, setFilter, choices }) {
               .filter((choice) => choice.toString().startsWith(value))
               .map((choice) => (
                 <li
+                  key={choice}
                   style={{
                     backgroundColor: choice === filter ? "red" : "white",
                   }}

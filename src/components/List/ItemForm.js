@@ -1,7 +1,9 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
+import { ListContext } from "../../contexts/ListContext";
 
-function ItemForm({ onSubmit }) {
-  const [name, setName] = useState("");
+function ItemForm({onSubmit, defaultName = ""}) {
+  const [name, setName] = useState(defaultName);
+
   return (
     <div>
       <label htmlFor="name">Label</label>

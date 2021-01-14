@@ -1,6 +1,6 @@
 import React from "react";
 
-//props: {} || {theme, toggleTheme}
+//props: {children} || {theme, toggleTheme}
 function Theme(props) {
   const theme = props.theme;
   const toggleTheme = props.toggleTheme;

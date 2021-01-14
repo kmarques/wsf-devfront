@@ -3,7 +3,7 @@ import logo from "./logo.svg";
 import "./App.css";
 import Theme from "./Theme";
 import List from "./components/List/List";
-import { ListContext } from "./contexts/ListContext";
+import ListProvider from "./contexts/ListContext";
 
 function App() {
   const [theme, setTheme] = useState({
@@ -26,10 +26,10 @@ function App() {
           <button onClick={() => setDisplayList(!displayList)}>
             Toggle list view
           </button>
-          <ListContext.Provider value={[3, 2, 3]}>
+          <ListProvider>
             {displayList && <List />}
             {!displayList && "Masked list"}
-          </ListContext.Provider>
+          </ListProvider>
           <p>
             Edit <code>src/App.js</code> and save to reload.
           </p>
