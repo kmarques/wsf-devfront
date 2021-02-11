@@ -9,6 +9,37 @@
       "name": "Couteaux"
     }
   ],
-  "products": [],
+  "products": [
+    {
+      "id": 1,
+      "name": "Fourchette",
+      "price": 1
+    },
+    {
+      "id": 2,
+      "name": "Couteaux",
+      "price": 2
+    },
+    {
+      "id": 3,
+      "name": "Assiette",
+      "price": 1
+    },
+    {
+      "id": 4,
+      "name": "Cuillère",
+      "price": 2
+    },
+    {
+      "id": 5,
+      "name": "Verre",
+      "price": 1
+    },
+    {
+      "id": 6,
+      "name": "Bouteille",
+      "price": 2
+    }
+  ],
   "orders": []
 }

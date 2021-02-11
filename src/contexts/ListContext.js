@@ -34,7 +34,7 @@ export default function ListProvider({ children }) {
         return repo.addItem(name).then((data) =>
           dispatch({
             type: "ADD_ITEM",
-            payload: data,
+            payload: {item: data},
           })
         );
       },

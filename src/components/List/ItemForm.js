@@ -1,13 +1,20 @@
 import React, { useState } from "react";
 
-function ItemForm({ onSubmit, defaultName = "" }) {
+function ItemForm({
+  onSubmit,
+  submitLabel = "Add Item",
+  inputLabel = "Item name",
+  defaultName = "",
+  inputType = "text",
+}) {
   const [name, setName] = useState(defaultName);
 
   return (
     <div>
-      <label htmlFor="name">Label</label>
+      <label htmlFor="name">{inputLabel}</label>
       <input
-        type="text"
+        id="name"
+        type={inputType}
         value={name}
         onChange={(event) => setName(event.target.value)}
       />
@@ -17,7 +24,7 @@ function ItemForm({ onSubmit, defaultName = "" }) {
           setName("");
         }}
       >
-        Add Item
+        {submitLabel}
       </button>
     </div>
   );

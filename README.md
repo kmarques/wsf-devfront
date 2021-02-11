@@ -2,7 +2,9 @@
 
 ## Utilities
 
-npx json-server --watch db.json
+json-server: Instancie un serveur RESTFULL à partir d'un fichier json
+```npx json-server --watch db.json```
+Pour changer le port d'écoute, ajouter l'option `--port 3001`
 ## REST
 
 GET = Read => 200,404

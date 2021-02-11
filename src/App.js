@@ -1,9 +1,9 @@
 import React, { useState, useMemo } from "react";
-import logo from "./logo.svg";
-import "./App.css";
-import Theme from "./Theme";
-import List from "./components/List/List";
-import ListProvider from "./contexts/ListContext";
+import { ProductProvider } from "./contexts/ProductContext";
+import ProductGallery from "./components/Product/Gallery";
+import CartProvider from "./contexts/CartContext";
+import Cart from "./components/Cart/Cart";
+import { Container } from "@material-ui/core";
 
 function App() {
   const [theme, setTheme] = useState({
@@ -20,28 +20,15 @@ function App() {
   return useMemo(
     () => (
       <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <Theme theme={theme} toggleTheme={toggleTheme} />
-          <button onClick={() => setDisplayList(!displayList)}>
-            Toggle list view
-          </button>
-          <ListProvider>
-            {displayList && <List />}
-            {!displayList && "Masked list"}
-          </ListProvider>
-          <p>
-            Edit <code>src/App.js</code> and save to reload.
-          </p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
+        <Container style={{ backgroundColor: "#3d3D3D" }}>
+          <ProductProvider>
+            <CartProvider>
+              <div>E-commerce</div>
+              <ProductGallery />
+              <Cart />
+            </CartProvider>
+          </ProductProvider>
+        </Container>
       </div>
     ),
     [theme, displayList]
