@@ -64,7 +64,7 @@ function List() {
                 <Search filter={filter} setFilter={setFilter} choices={list} />
                 <ul>
                   {listFiltered.map((item) => (
-                    <ItemList key={item} item={item} />
+                    <ItemList key={item.id} item={item} />
                   ))}
                 </ul>
                 <ItemForm onSubmit={addItem} />
