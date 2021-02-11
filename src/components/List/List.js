@@ -31,7 +31,7 @@ function List() {
     selectors,
     actions: { addItem },
   } = useContext(ListContext);
-  const [filter, setFilter] = useState("");
+  const [filter, setFilter] = useState({ name: "" });
   const [bool, setBool] = useState(true);
 
   const list = selectors.getItems();
@@ -46,7 +46,7 @@ function List() {
 
   const listFiltered = useMemo(() => {
     console.log("Update filtered list");
-    return list.filter((item) => item.toString().startsWith(filter));
+    return list.filter((item) => item.name.startsWith(filter.name));
   }, [list, filter]);
 
   const toggleBool = useCallback(() => {
@@ -61,7 +61,13 @@ function List() {
             <button onClick={toggleBool}>Display list</button>
             {bool && (
               <>
-                <Search filter={filter} setFilter={setFilter} choices={list} />
+                <Search
+                  filter={filter}
+                  setFilter={setFilter}
+                  choices={list}
+                  valueExtractor={(choice) => choice.name}
+                  keyExtractor={(choice) => choice.id}
+                />
                 <ul>
                   {listFiltered.map((item) => (
                     <ItemList key={item.id} item={item} />

@@ -5,8 +5,14 @@ import React, { useState } from "react";
  * - Créer une liste filtrée par le champs de recherche (useState + useEffect)
  * - Utiliser la liste filtrée pour l'affichage
  */
-function SearchAutocomplete({ filter, setFilter, choices }) {
-  const [value, setValue] = useState(filter);
+function SearchAutocomplete({
+  filter,
+  setFilter,
+  choices,
+  keyExtractor = (item) => item,
+  valueExtractor = (item) => item,
+}) {
+  const [value, setValue] = useState(valueExtractor(filter));
   return (
     <div style={{ position: "relative" }}>
       <input
@@ -21,16 +27,15 @@ function SearchAutocomplete({ filter, setFilter, choices }) {
             color: "black",
             position: "absolute",
             width: "100%",
-            bottom: 0,
             left: 0,
           }}
         >
           <ul>
             {choices
-              .filter((choice) => choice.toString().startsWith(value))
+              .filter((choice) => valueExtractor(choice).startsWith(value))
               .map((choice) => (
                 <li
-                  key={choice}
+                  key={keyExtractor(choice)}
                   style={{
                     backgroundColor: choice === filter ? "red" : "white",
                   }}
@@ -39,7 +44,7 @@ function SearchAutocomplete({ filter, setFilter, choices }) {
                     setValue("");
                   }}
                 >
-                  {choice}
+                  {valueExtractor(choice)}
                 </li>
               ))}
           </ul>
