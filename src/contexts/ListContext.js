@@ -1,59 +1,58 @@
 import React, { createContext, useState, useEffect, useCallback } from "react";
+import * as backend from "./actions/list-backend";
+import * as storage from "./actions/list-localstorage";
 
-const table = [1, 2, 3];
+const repo = backend;
 
 export const ListContext = createContext([]);
 
 export default function ListProvider({ children }) {
   const [list, setList] = useState([]);
+  const [received, setReceived] = useState(false);
 
   useEffect(() => {
-    fetch("http://localhost:3000/posts")
-      .then((res) => res.json())
-      .then((data) => setList(data));
+    setTimeout(
+      () => repo.getItems().then((data) => setList(data) || setReceived(true)),
+      5000
+    );
   }, []);
 
-  const addItem = useCallback(
-    (name) => {
-      return fetch("http://localhost:3000/posts", {
-        method: "POST",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ name }),
-      })
-        .then((res) => res.json())
-        .then((data) => setList([...list, data]));
-    },
-    [list]
-  );
+  const actions = {
+    addItem: useCallback(
+      (name) => {
+        return repo.addItem(name).then((data) => setList([...list, data]));
+      },
+      [list]
+    ),
+    updateItem: useCallback(
+      (item, value) => {
+        return repo
+          .updateItem(item, value)
+          .then((data) =>
+            setList(list.map((elem) => (elem.id === item.id ? data : elem)))
+          );
+      },
+      [list]
+    ),
+    deleteItem: useCallback(
+      (item) => {
+        return repo
+          .deleteItem(item)
+          .then(() => setList(list.filter((elem) => elem.id !== item.id)));
+      },
+      [list]
+    ),
+  };
 
-  const updateItem = useCallback(
-    (item, value) => {
-      return fetch("http://localhost:3000/posts/" + item.id, {
-        method: "PUT",
-        headers: { "content-type": "application/json" },
-        body: JSON.stringify({ id: item.id, name: value }),
-      })
-        .then((res) => res.json())
-        .then((data) =>
-          setList(list.map((elem) => (elem.id === item.id ? data : elem)))
-        );
-    },
-    [list]
-  );
-
-  const deleteItem = useCallback(
-    (item) => {
-      return fetch("http://localhost:3000/posts/" + item.id, {
-        method: "DELETE",
-      })
-        .then((res) => res.json())
-        .then(() => setList(list.filter((elem) => elem.id !== item.id)));
-    },
-    [list]
-  );
+  const selectors = {
+    getItems: () => list,
+    getNbItems: () => list.length,
+    getItem: (id) => list.find((elem) => elem.id === id),
+    isItemsReceived: () => received,
+  };
 
   return (
-    <ListContext.Provider value={{ list, addItem, updateItem, deleteItem }}>
+    <ListContext.Provider value={{ selectors, actions }}>
       {children}
     </ListContext.Provider>
   );

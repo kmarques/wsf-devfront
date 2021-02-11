@@ -27,9 +27,15 @@ function SayHi() {
  * - Utiliser la liste filtrée pour l'affichage
  */
 function List() {
-  const { list, addItem } = useContext(ListContext);
+  const {
+    selectors,
+    actions: { addItem },
+  } = useContext(ListContext);
   const [filter, setFilter] = useState("");
   const [bool, setBool] = useState(true);
+
+  const list = selectors.getItems();
+  const received = selectors.isItemsReceived();
 
   useEffect(() => {
     console.log("UE2 - List mounted/updated");
@@ -50,18 +56,27 @@ function List() {
   return useMemo(
     () => (
       <div>
-        <button onClick={toggleBool}>toggle</button>
-        <Search filter={filter} setFilter={setFilter} choices={list} />
-        <ul>
-          {listFiltered.map((item) => (
-            <ItemList key={item} item={item} />
-          ))}
-        </ul>
-        <ItemForm onSubmit={addItem}/>
+        {received && (
+          <>
+            <button onClick={toggleBool}>Display list</button>
+            {bool && (
+              <>
+                <Search filter={filter} setFilter={setFilter} choices={list} />
+                <ul>
+                  {listFiltered.map((item) => (
+                    <ItemList key={item} item={item} />
+                  ))}
+                </ul>
+                <ItemForm onSubmit={addItem} />
+              </>
+            )}
+          </>
+        )}
+        {!received && "Chargement en cours..."}
         <SayHi />
       </div>
     ),
-    [toggleBool, filter, listFiltered, list]
+    [toggleBool, filter, listFiltered, list, received]
   );
 }
 

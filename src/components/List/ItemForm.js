@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
-import { ListContext } from "../../contexts/ListContext";
+import React, { useState } from "react";
 
-function ItemForm({onSubmit, defaultName = ""}) {
+function ItemForm({ onSubmit, defaultName = "" }) {
   const [name, setName] = useState(defaultName);
 
   return (

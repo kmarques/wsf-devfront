@@ -3,7 +3,10 @@ import { ListContext } from "../../contexts/ListContext";
 import ItemForm from "./ItemForm";
 
 function ItemList({ item }) {
-  const { deleteItem, updateItem } = useContext(ListContext);
+  const {
+    actions: { deleteItem, updateItem },
+  } = useContext(ListContext);
+
   const [bool, setBool] = useState(false);
 
   const toggleEditItem = () => {
