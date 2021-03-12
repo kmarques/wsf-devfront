@@ -29,46 +29,39 @@ export default function ListProvider({ children }) {
   }, []);
 
   const actions = {
-    addItem: useCallback(
-      (name) => {
-        return repo.addItem(name).then((data) =>
-          dispatch({
-            type: "ADD_ITEM",
-            payload: {item: data},
-          })
-        );
-      },
-      [state.list]
-    ),
-    updateItem: useCallback(
-      (item, value) => {
-        return repo.updateItem(item, value).then((data) =>
-          dispatch({
-            type: "UPDATE_ITEM",
-            payload: data,
-          })
-        );
-      },
-      [state.list]
-    ),
-    deleteItem: useCallback(
-      (item) => {
-        return repo.deleteItem(item).then(() =>
-          dispatch({
-            type: "DELETE_ITEM",
-            payload: item,
-          })
-        );
-      },
-      [state.list]
-    ),
+    addItem: useCallback((name) => {
+      return repo.addItem(name).then((data) =>
+        dispatch({
+          type: "ADD_ITEM",
+          payload: { item: data },
+        })
+      );
+    }, []),
+    updateItem: useCallback((item, value) => {
+      return repo.updateItem(item, value).then((data) =>
+        dispatch({
+          type: "UPDATE_ITEM",
+          payload: data,
+        })
+      );
+    }, []),
+    deleteItem: useCallback((item) => {
+      return repo.deleteItem(item).then(() =>
+        dispatch({
+          type: "DELETE_ITEM",
+          payload: item,
+        })
+      );
+    }, []),
   };
 
   const selectors = {
-    getItems: () => state.list,
-    getNbItems: () => state.list.length,
-    getItem: (id) => state.list.find((elem) => elem.id === id),
-    isItemsReceived: () => state.received,
+    getItems: useCallback(() => state.list, [state.list]),
+    getNbItems: useCallback(() => state.list.length, [state.list]),
+    getItem: useCallback((id) => state.list.find((elem) => elem.id === id), [
+      state.list,
+    ]),
+    isItemsReceived: useCallback(() => state.received, [state.list]),
   };
 
   return (

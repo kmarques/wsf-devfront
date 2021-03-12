@@ -4,6 +4,7 @@ import ProductGallery from "./components/Product/Gallery";
 import CartProvider from "./contexts/CartContext";
 import Cart from "./components/Cart/Cart";
 import { Container } from "@material-ui/core";
+import UserList from "./components/User/List";
 
 function App() {
   const [theme, setTheme] = useState({
@@ -20,14 +21,8 @@ function App() {
   return useMemo(
     () => (
       <div className="App">
-        <Container style={{ backgroundColor: "#3d3D3D" }}>
-          <ProductProvider>
-            <CartProvider>
-              <div>E-commerce</div>
-              <ProductGallery />
-              <Cart />
-            </CartProvider>
-          </ProductProvider>
+        <Container>
+          <UserList />
         </Container>
       </div>
     ),
