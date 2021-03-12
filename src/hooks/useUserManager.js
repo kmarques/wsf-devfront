@@ -23,9 +23,13 @@ export default function useUserManager(loadOnMount = false) {
       });
   };
 
+  const getUsersPage = (params) => {
+console.log(params);
+  }
+
   useEffect(() => {
     if (loadOnMount || users !== undefined) getUsers();
   }, [perPage]);
 
-  return { users, isLast, loadMore, getUsers, perPage, setPerPage };
+  return { users, isLast, loadMore, getUsers, perPage, setPerPage, getUsersPage };
 }
